@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>One Webinar → An Entire Content Engine</title>
+<style>
+  :root{
+    --ink:#111827;
+    --muted:#667085;
+    --paper:#f8fbff;
+    --cyan:#16d9ff;
+    --blue:#3377ff;
+    --violet:#8b5cf6;
+    --pink:#ff4fbf;
+    --lime:#b8f23c;
+    --orange:#ff9a3d;
+    --card:rgba(255,255,255,.88);
+    --line:rgba(51,119,255,.22);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#eaf3ff;font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial;color:var(--ink);overflow:hidden}
+  body{display:grid;place-items:center}
+  .frame{
+    width:min(100vw,177.78vh); aspect-ratio:16/9; position:relative; overflow:hidden;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(22,217,255,.24), transparent 23%),
+      radial-gradient(circle at 88% 12%, rgba(255,79,191,.18), transparent 20%),
+      radial-gradient(circle at 78% 78%, rgba(139,92,246,.18), transparent 26%),
+      linear-gradient(135deg,#fbfdff 0%,#f3f8ff 48%,#eef4ff 100%);
+  }
+  .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(51,119,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(51,119,255,.045) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.65),transparent 78%)}
+  .blob{position:absolute;border-radius:999px;filter:blur(1px);opacity:.65}
+  .b1{width:180px;height:180px;background:linear-gradient(135deg,var(--cyan),var(--blue));left:-45px;top:55px}
+  .b2{width:130px;height:130px;background:linear-gradient(135deg,var(--pink),var(--violet));right:-20px;top:110px}
+  .b3{width:110px;height:110px;background:linear-gradient(135deg,var(--lime),var(--cyan));right:130px;bottom:70px}
+
+  header{position:absolute;left:6.2%;right:6.2%;top:5.6%;display:flex;align-items:flex-end;justify-content:space-between;z-index:5}
+  .eyebrow{font-size:13px;letter-spacing:.19em;text-transform:uppercase;font-weight:800;color:var(--blue);margin-bottom:8px}
+  h1{font-size:clamp(31px,3.1vw,54px);line-height:.98;letter-spacing:-.045em;margin:0;max-width:840px}
+  h1 span{background:linear-gradient(90deg,var(--blue),var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{font-size:14px;line-height:1.4;color:var(--muted);max-width:330px;text-align:right;margin-bottom:3px}
+
+  .stage{position:absolute;left:4.4%;right:4.4%;top:20.5%;height:70%;z-index:4}
+  svg.connections{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+  .path{fill:none;stroke:url(#grad);stroke-width:2.6;stroke-linecap:round;opacity:.72}
+
+  .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:220px;height:220px;border-radius:50%;display:grid;place-items:center;text-align:center;color:#fff;z-index:7;
+    background:linear-gradient(145deg,#2563eb 4%,#6d5dfc 54%,#e94bc9 100%);box-shadow:0 24px 60px rgba(78,75,220,.34), inset 0 0 0 1px rgba(255,255,255,.25)}
+  .hub:before{content:"";position:absolute;inset:-15px;border-radius:50%;border:1px solid rgba(51,119,255,.22)}
+  .hub:after{content:"";position:absolute;inset:-32px;border-radius:50%;border:1px solid rgba(139,92,246,.12)}
+  .hub small{display:block;font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;opacity:.8;margin-bottom:7px}
+  .hub strong{display:block;font-size:26px;line-height:1.0;letter-spacing:-.035em}
+  .hub em{display:block;font-size:13px;font-style:normal;opacity:.88;margin-top:9px}
+
+  .branch{position:absolute;width:292px;min-height:148px;padding:18px 20px 17px;border-radius:22px;background:var(--card);backdrop-filter:blur(12px);box-shadow:0 14px 34px rgba(33,60,120,.12);border:1px solid rgba(255,255,255,.8);z-index:6}
+  .branch .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:18px;color:#fff;font-weight:900;box-shadow:0 8px 18px rgba(40,55,120,.18)}
+  .branch h3{font-size:16px;margin:0;letter-spacing:-.015em}.branch li span{color:var(--blue);font-weight:800}
+  .branch ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr;gap:7px;font-size:12.5px;color:#49566a}
+  .branch li:before{content:"•";margin-right:6px;font-weight:900}
+  .social{left:1.8%;top:8.5%}.social .icon{background:linear-gradient(135deg,var(--pink),var(--violet))}.social li:before{color:var(--pink)}
+  .written{right:1.8%;top:8.5%}.written .icon{background:linear-gradient(135deg,var(--cyan),var(--blue))}.written li:before{color:var(--blue)}
+  .email{left:1.8%;bottom:7.5%}.email .icon{background:linear-gradient(135deg,var(--orange),var(--pink))}.email li:before{color:var(--orange)}
+  .search{right:1.8%;bottom:7.5%}.search .icon{background:linear-gradient(135deg,#4ccf83,var(--lime));color:#17301f}.search li:before{color:#35b76d}
+
+  .asset-count{position:absolute;left:50%;top:4.5%;transform:translateX(-50%);font-weight:900;font-size:15px;color:#475467;letter-spacing:.01em;z-index:8;white-space:nowrap}
+  .asset-count b{color:var(--violet);font-size:22px;margin-right:4px}
+
+  .scale{position:absolute;left:6.2%;right:6.2%;bottom:5.4%;height:17.5%;border-radius:27px;background:rgba(17,24,39,.96);color:#fff;z-index:8;box-shadow:0 20px 60px rgba(18,28,61,.25);overflow:hidden}
+  .scale:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(22,217,255,.1),transparent 35%,rgba(255,79,191,.09) 70%,rgba(184,242,60,.10));}
+  .scale-inner{position:relative;height:100%;display:grid;grid-template-columns:1.22fr 2.8fr;gap:24px;align-items:center;padding:20px 28px}
+  .scale .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#93c5fd;font-weight:800;margin-bottom:5px}
+  .scale h2{font-size:22px;line-height:1.02;margin:0 0 6px;letter-spacing:-.03em}
+  .scale p{font-size:12px;color:#c8d1df;margin:0;max-width:310px}
+  .flow{display:flex;align-items:center;justify-content:space-between;gap:7px}
+  .step{position:relative;min-width:0;flex:1;text-align:center;padding:10px 8px;border-radius:15px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);font-size:11.5px;line-height:1.15;font-weight:750;}
+  .step:nth-child(3){}.step:nth-child(5){}.step:nth-child(7){}.step:nth-child(9){}
+.arrow{font-size:18px;color:#7dd3fc;opacity:.75;}
+.step b{display:block;font-size:10px;color:#98a2b3;margin-bottom:4px;font-weight:700}
+  .footnote{position:absolute;right:5.2%;bottom:1.8%;font-size:9.5px;color:#8491a7;z-index:9}
+
+  @media (max-width:900px){.branch{width:220px}.hub{width:180px;height:180px}.scale-inner{grid-template-columns:1fr 2.4fr}.sub{display:none}}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="grid"></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+  <header>
+    <div>
+      <div class="eyebrow">Content repurposing blueprint</div>
+      <h1>One webinar can become an <span>entire content engine.</span></h1>
+    </div>
+    <div class="sub">The value is not only the live session. It is what the conversation becomes afterward.</div>
+  </header>
+
+  <section class="stage">
+    <div class="asset-count"><b>15</b> content assets from one focused webinar</div>
+    <svg class="connections" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
+      <defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16d9ff"/><stop offset=".48" stop-color="#8b5cf6"/><stop offset="1" stop-color="#ff4fbf"/></linearGradient></defs>
+      <path class="path" d="M600,255 C480,210 390,135 265,115"/>
+      <path class="path" d="M600,255 C720,210 810,135 935,115"/>
+      <path class="path" d="M600,255 C470,305 390,390 265,405"/>
+      <path class="path" d="M600,255 C730,305 810,390 935,405"/>
+    </svg>
+
+    <div class="hub"><div><small>Master asset</small><strong>20–30 min<br>Webinar</strong><em>Full on-demand recording</em></div></div>
+
+    <div class="branch social">
+      <div class="top"><div class="icon">▶</div><h3>Video + Social</h3></div>
+      <ul><li>Full on-demand recording</li><li>Short video clips</li><li>Social posts</li><li>Quotes + graphics</li></ul>
+    </div>
+
+    <div class="branch written">
+      <div class="top"><div class="icon">✎</div><h3>Written + Search</h3></div>
+      <ul><li>Written article <span>(AI + SEO)</span></li><li>Executive summary</li><li>Transcript</li><li>Searchable webinar</li></ul>
+    </div>
+
+    <div class="branch email">
+      <div class="top"><div class="icon">✉</div><h3>Email + Sales</h3></div>
+      <ul><li>Email content</li><li>Newsletter content</li><li>Sales follow-up</li></ul>
+    </div>
+
+    <div class="branch search">
+      <div class="top"><div class="icon">✓</div><h3>Downloads + Education</h3></div>
+      <ul><li>Key takeaway download</li><li>Checklists</li><li>FAQs</li><li>Future thought leadership topics</li></ul>
+    </div>
+  </section>
+
+  <div class="footnote">One focused webinar can support video, written content, downloads, nurture, sales and long-tail discovery.</div>
+</div>
+</body>
+</html>
